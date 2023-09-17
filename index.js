@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const fs = require ('fs')
-var _ = require('underscore'); 
+// var _ = require('underscore'); 
 
 operation()
 
@@ -15,7 +15,8 @@ function operation(){
             choices: [
                 'anti inflamatórios não esteroidais',
                 'corticoides',
-                'anti depressivos'
+                'anti depressivos',
+                'Sair'
             ]
         }
     ]).then((resposta => {
@@ -54,8 +55,8 @@ function AIE(){
 
     console.log(chalk.bgGreen.white(`olá Kássia, vamos iniciar seus estudos no tema anti inflamatórios não esteroidais`))
 
-    let perguntas = GetPerguntasGlobal()
-    let getResp = PegarResposta()
+    let perguntas = GetPerguntasGlobal('AIE', 'AIEPer')
+    let getResp = PegarResposta('AIE')
     
     AieInit()
     function AieInit(){
@@ -135,16 +136,184 @@ function AIE(){
 }
 
 
+//FUNÇÃO PARA CORTICOIDES 
+
+function corticoides(){
+
+    console.log('dentro da func de corticoides  ')
+
+    let perguntas = GetPerguntasGlobal('corticoides', 'cort')
+    let getResp = PegarResposta('cort')
+    
+    cortInit()
+    function cortInit(){
+
+        let objSize = Object.keys(perguntas).length;
+
+        // console.log('tamanho ' + objSize)
+        // console.log(perguntas)
+
+        if(objSize == 0){
+            console.log('fim das perguntas');
+            return operation()
+        }
+
+        let max = Math.floor(objSize);
+        let min =  Math.ceil(0);
+
+        var indice = Math.floor(Math.random() * (max - min + min) + min);
+        let objIndice = Object.entries(perguntas)[indice]
+
+        // console.log(objIndice)
+
+        let valor = objIndice[0]
+
+        // console.log('valor ' + valor)
+
+        var pergunta = perguntas[valor]
+
+        // console.log(pergunta)
+
+        delete perguntas[valor];
+
+        inquirer.prompt([
+            {
+                name: 'pergunta',
+                message: pergunta
+                
+            }
+        ]).then(() => {
+
+            inquirer.prompt([
+                {
+                    name: 'Meresposta',
+                    message: 'digite sua resposta'
+                }
+            ]).then((resposta) => {
+
+                const Resposta = resposta['Meresposta']
+
+                let objIndiceR = Object.entries(getResp)[indice]
+                console.log('indiceR ' + objIndiceR)
+
+                let valorR = objIndiceR[0]
+                // console.log('valor ' + valorR)
+
+                // console.log(getResp)
+                // console.log(getResp[valorR])
+
+                if(Resposta === getResp[valorR]){
+                    console.log('resposta correta')
+                    delete getResp[valorR];
+                    return cortInit()
+                }else{
+                    console.log('resposta incorreta. tente novamente')
+                    delete getResp[valorR];
+                    return cortInit()
+                }
+
+            }).catch(
+                err => console.log(err)
+            )
+
+        }) 
+
+    }
+
+}
+
+
+// FUNÇÃO PARA ANTI DEPRESIVOS
+
+function AD(){
+
+    console.log('dentro da func de anti depresivos  ')
+
+    let perguntas = GetPerguntasGlobal('antidep', 'AD')
+    let getResp = PegarResposta('AD')
+    
+    ADinit()
+    function ADinit(){
+
+        let objSize = Object.keys(perguntas).length;
+
+        // console.log('tamanho ' + objSize)
+        // console.log(perguntas)
+
+        if(objSize == 0){
+            console.log('fim das perguntas');
+            return operation()
+        }
+
+        let max = Math.floor(objSize);
+        let min =  Math.ceil(0);
+
+        var indice = Math.floor(Math.random() * (max - min + min) + min);
+        let objIndice = Object.entries(perguntas)[indice]
+
+        // console.log(objIndice)
+
+        let valor = objIndice[0]
+
+        // console.log('valor ' + valor)
+
+        var pergunta = perguntas[valor]
+
+        // console.log(pergunta)
+
+        delete perguntas[valor];
+
+        inquirer.prompt([
+            {
+                name: 'pergunta',
+                message: pergunta
+                
+            }
+        ]).then(() => {
+
+            inquirer.prompt([
+                {
+                    name: 'Meresposta',
+                    message: 'digite sua resposta'
+                }
+            ]).then((resposta) => {
+
+                const Resposta = resposta['Meresposta']
+
+                let objIndiceR = Object.entries(getResp)[indice]
+                console.log('indiceR ' + objIndiceR)
+
+                let valorR = objIndiceR[0]
+                // console.log('valor ' + valorR)
+
+                // console.log(getResp)
+                // console.log(getResp[valorR])
+
+                if(Resposta === getResp[valorR]){
+                    console.log('resposta correta')
+                    delete getResp[valorR];
+                    return ADinit()
+                }else{
+                    console.log('resposta incorreta. tente novamente')
+                    delete getResp[valorR];
+                    return ADinit()
+                }
+
+            }).catch(
+                err => console.log(err)
+            )
+
+        }) 
+
+    }
+
+}
+
 //  FUNÇÃO PARA PEGAR PERGUNTAS 
 
-// function GetPerguntas(NomeConta){
+function GetPerguntasGlobal(pasta, arquivo ){
 
-
-// }
-
-function GetPerguntasGlobal(){
-
-    const contaJSON = fs.readFileSync(`perguntas/AIE/AIEPer.json`, {
+    const contaJSON = fs.readFileSync(`perguntas/${pasta}/${arquivo}.json`, {
         encoding: 'utf8',
         flag: 'r'
     });
@@ -152,9 +321,12 @@ function GetPerguntasGlobal(){
     return JSON.parse(contaJSON);
 }
 
-function PegarResposta(){
 
-    const contaJSON = fs.readFileSync(`respostas/AIE.json`, {
+// FUNÇÃO PARA PEGAR RESPOSTAS
+
+function PegarResposta(arquivo){
+
+    const contaJSON = fs.readFileSync(`respostas/${arquivo}.json`, {
         encoding: 'utf8',
         flag: 'r'
     });
@@ -162,33 +334,3 @@ function PegarResposta(){
     return JSON.parse(contaJSON);
 
 }
-
-
-
-// ESCREVER DADOS NO BANCO DE DADOS
-
-// function EscreverBanco(banco, data){
-
-//     fs.appendFile(
-//         `indices/${banco}.json`,
-//         JSON.stringify(data),
-//         function(err){
-//             console.log(err)
-//         }
-//     )
-
-// }
-
-//FUNÇÃO PARA ADICIONAR INDICE
-
-// function ADDINDICE(valor){
-
-//     // let indice:
-
-//     // console.log(indice)
-
-//     // return indice.push(valor)
-
-    
-
-// }
