@@ -55,81 +55,72 @@ function AIE(){
 
     console.log(chalk.bgGreen.white(`olá Kássia, vamos iniciar seus estudos no tema anti inflamatórios não esteroidais`))
 
+   
     let perguntas = GetPerguntasGlobal('AIE', 'AIEPer')
     let getResp = PegarResposta('AIE')
-    
+
     AieInit()
+   
     function AieInit(){
 
-        let objSize = Object.keys(perguntas).length;
+        AllGetQuestion(perguntas, getResp, func);
 
-        // console.log('tamanho ' + objSize)
-        // console.log(perguntas)
+        // let objSize = Object.keys(perguntas).length;
 
-        if(objSize == 0){
-            console.log('fim das perguntas');
-            return operation()
-        }
+        // if(objSize == 0){
+        //     console.log('fim das perguntas');
+        //     return operation()
+        // }
 
-        let max = Math.floor(objSize);
-        let min =  Math.ceil(0);
+        // let max = Math.floor(objSize);
+        // let min =  Math.ceil(0);
 
-        var indice = Math.floor(Math.random() * (max - min + min) + min);
-        let objIndice = Object.entries(perguntas)[indice]
+        // var indice = Math.floor(Math.random() * (max - min + min) + min);
+        // let objIndice = Object.entries(perguntas)[indice]
 
-        // console.log(objIndice)
+        // let valor = objIndice[0]
 
-        let valor = objIndice[0]
+        // var pergunta = perguntas[valor]
 
-        // console.log('valor ' + valor)
+        // delete perguntas[valor];
 
-        var pergunta = perguntas[valor]
-
-        // console.log(pergunta)
-
-        delete perguntas[valor];
-
-        inquirer.prompt([
-            {
-                name: 'pergunta',
-                message: pergunta
+        // inquirer.prompt([
+        //     {
+        //         name: 'pergunta',
+        //         // message: pergunta
                 
-            }
-        ]).then(() => {
+        //     }
+        // ]).then(() => {
 
-            inquirer.prompt([
-                {
-                    name: 'Meresposta',
-                    message: 'digite sua resposta'
-                }
-            ]).then((resposta) => {
+        //     inquirer.prompt([
+        //         {
+        //             name: 'Meresposta',
+        //             message: 'digite sua resposta'
+        //         }
+        //     ]).then((resposta) => {
 
-                const Resposta = resposta['Meresposta']
+        //         const Resposta = resposta['Meresposta']
 
-                let objIndiceR = Object.entries(getResp)[indice]
-                console.log('indiceR ' + objIndiceR)
+        //         let objIndiceR = Object.entries(getResp)[indice]
+        //         console.log('indiceR ' + objIndiceR)
 
-                let valorR = objIndiceR[0]
-                // console.log('valor ' + valorR)
+        //         let valorR = objIndiceR[0]
 
-                // console.log(getResp)
-                // console.log(getResp[valorR])
+        //         if(Resposta === getResp[valorR]){
+        //             console.log('resposta correta')
+        //             delete getResp[valorR];
+        //             return AieInit()
+        //         }else{
+        //             console.log('resposta incorreta. tente novamente')
+        //             delete getResp[valorR];
+        //             return AieInit()
+        //         }
 
-                if(Resposta === getResp[valorR]){
-                    console.log('resposta correta')
-                    delete getResp[valorR];
-                    return AieInit()
-                }else{
-                    console.log('resposta incorreta. tente novamente')
-                    delete getResp[valorR];
-                    return AieInit()
-                }
+        //     }).catch(
+        //         err => console.log(err)
+        //     )
 
-            }).catch(
-                err => console.log(err)
-            )
-
-        }) 
+        // }) 
 
     }
 
@@ -332,5 +323,68 @@ function PegarResposta(arquivo){
     });
 
     return JSON.parse(contaJSON);
+
+}
+
+// FUNÇÃO PARA OTIMIZAR PARTE REPETITIVA DE PERGUNTAS
+
+function AllGetQuestion(perguntas, getResp, ReturnFunc){
+
+    let objSize = Object.keys(perguntas).length;
+
+        if(objSize == 0){
+            console.log('fim das perguntas');
+            return operation()
+        }
+
+        let max = Math.floor(objSize);
+        let min =  Math.ceil(0);
+
+        var indice = Math.floor(Math.random() * (max - min + min) + min);
+        let objIndice = Object.entries(perguntas)[indice]
+
+        let valor = objIndice[0]
+
+        var pergunta = perguntas[valor]
+
+        delete perguntas[valor];
+
+        inquirer.prompt([
+            {
+                name: 'pergunta',
+                message: pergunta
+                
+            }
+        ]).then(() => {
+
+            inquirer.prompt([
+                {
+                    name: 'Meresposta',
+                    message: 'digite sua resposta'
+                }
+            ]).then((resposta) => {
+
+                const Resposta = resposta['Meresposta']
+
+                let objIndiceR = Object.entries(getResp)[indice]
+                console.log('indiceR ' + objIndiceR)
+
+                let valorR = objIndiceR[0]
+
+                if(Resposta === getResp[valorR]){
+                    console.log('resposta correta')
+                    delete getResp[valorR];
+                    return ReturnFunc
+                }else{
+                    console.log('resposta incorreta. tente novamente')
+                    delete getResp[valorR];
+                    return ReturnFunc
+                }
+
+            }).catch(
+                err => console.log(err)
+            )
+
+        }) 
 
 }
