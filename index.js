@@ -49,79 +49,50 @@ function operation(){
 }
 
 
+// FUNÇÃO PARA SAIR 
+
+function Sair(){
+    console.log(chalk.bgBlue.white('Fechando terminal de perguntas!!'));
+
+    inquirer.prompt([
+        {
+           type: 'list',
+           name: 'action',
+           message: 'deseja limpar o registro de ação?',
+           choices: [
+                'Sim',
+                'Não'
+           ]
+
+        }
+    ]).then((resposta => {
+        const action = resposta['action']
+
+        if(action === 'Sim'){
+            console.clear();
+            process.exit();
+        }
+        else if(action === 'Não'){
+            process.exit();
+        }
+
+    })).catch(err => console.log(err))  
+}
+
 // FUNÇÃO PARA anti inflamatórios não esteroidais 
 
 function AIE(){
 
     console.log(chalk.bgGreen.white(`olá Kássia, vamos iniciar seus estudos no tema anti inflamatórios não esteroidais`))
-
    
-    let perguntas = GetPerguntasGlobal('AIE', 'AIEPer')
-    let getResp = PegarResposta('AIE')
+    const perguntas = GetPerguntasGlobal('AIE', 'AIEPer')
+    const getResp = PegarResposta('AIE')
+    const func = AieInit
 
     AieInit()
-   
+
     function AieInit(){
-
         AllGetQuestion(perguntas, getResp, func);
-
-        // let objSize = Object.keys(perguntas).length;
-
-        // if(objSize == 0){
-        //     console.log('fim das perguntas');
-        //     return operation()
-        // }
-
-        // let max = Math.floor(objSize);
-        // let min =  Math.ceil(0);
-
-        // var indice = Math.floor(Math.random() * (max - min + min) + min);
-        // let objIndice = Object.entries(perguntas)[indice]
-
-        // let valor = objIndice[0]
-
-        // var pergunta = perguntas[valor]
-
-        // delete perguntas[valor];
-
-        // inquirer.prompt([
-        //     {
-        //         name: 'pergunta',
-        //         // message: pergunta
-                
-        //     }
-        // ]).then(() => {
-
-        //     inquirer.prompt([
-        //         {
-        //             name: 'Meresposta',
-        //             message: 'digite sua resposta'
-        //         }
-        //     ]).then((resposta) => {
-
-        //         const Resposta = resposta['Meresposta']
-
-        //         let objIndiceR = Object.entries(getResp)[indice]
-        //         console.log('indiceR ' + objIndiceR)
-
-        //         let valorR = objIndiceR[0]
-
-        //         if(Resposta === getResp[valorR]){
-        //             console.log('resposta correta')
-        //             delete getResp[valorR];
-        //             return AieInit()
-        //         }else{
-        //             console.log('resposta incorreta. tente novamente')
-        //             delete getResp[valorR];
-        //             return AieInit()
-        //         }
-
-        //     }).catch(
-        //         err => console.log(err)
-        //     )
-
-        // }) 
-
     }
 
 }
@@ -133,82 +104,14 @@ function corticoides(){
 
     console.log('dentro da func de corticoides  ')
 
-    let perguntas = GetPerguntasGlobal('corticoides', 'cort')
-    let getResp = PegarResposta('cort')
+    const perguntas = GetPerguntasGlobal('corticoides', 'cort')
+    const getResp = PegarResposta('cort')
+    const func = cortInit
     
     cortInit()
+
     function cortInit(){
-
-        let objSize = Object.keys(perguntas).length;
-
-        // console.log('tamanho ' + objSize)
-        // console.log(perguntas)
-
-        if(objSize == 0){
-            console.log('fim das perguntas');
-            return operation()
-        }
-
-        let max = Math.floor(objSize);
-        let min =  Math.ceil(0);
-
-        var indice = Math.floor(Math.random() * (max - min + min) + min);
-        let objIndice = Object.entries(perguntas)[indice]
-
-        // console.log(objIndice)
-
-        let valor = objIndice[0]
-
-        // console.log('valor ' + valor)
-
-        var pergunta = perguntas[valor]
-
-        // console.log(pergunta)
-
-        delete perguntas[valor];
-
-        inquirer.prompt([
-            {
-                name: 'pergunta',
-                message: pergunta
-                
-            }
-        ]).then(() => {
-
-            inquirer.prompt([
-                {
-                    name: 'Meresposta',
-                    message: 'digite sua resposta'
-                }
-            ]).then((resposta) => {
-
-                const Resposta = resposta['Meresposta']
-
-                let objIndiceR = Object.entries(getResp)[indice]
-                console.log('indiceR ' + objIndiceR)
-
-                let valorR = objIndiceR[0]
-                // console.log('valor ' + valorR)
-
-                // console.log(getResp)
-                // console.log(getResp[valorR])
-
-                if(Resposta === getResp[valorR]){
-                    console.log('resposta correta')
-                    delete getResp[valorR];
-                    return cortInit()
-                }else{
-                    console.log('resposta incorreta. tente novamente')
-                    delete getResp[valorR];
-                    return cortInit()
-                }
-
-            }).catch(
-                err => console.log(err)
-            )
-
-        }) 
-
+        AllGetQuestion(perguntas, getResp, func);
     }
 
 }
@@ -220,85 +123,17 @@ function AD(){
 
     console.log('dentro da func de anti depresivos  ')
 
-    let perguntas = GetPerguntasGlobal('antidep', 'AD')
-    let getResp = PegarResposta('AD')
+    const perguntas = GetPerguntasGlobal('antidep', 'AD')
+    const getResp = PegarResposta('AD')
+    const func = ADinit
     
     ADinit()
     function ADinit(){
-
-        let objSize = Object.keys(perguntas).length;
-
-        // console.log('tamanho ' + objSize)
-        // console.log(perguntas)
-
-        if(objSize == 0){
-            console.log('fim das perguntas');
-            return operation()
-        }
-
-        let max = Math.floor(objSize);
-        let min =  Math.ceil(0);
-
-        var indice = Math.floor(Math.random() * (max - min + min) + min);
-        let objIndice = Object.entries(perguntas)[indice]
-
-        // console.log(objIndice)
-
-        let valor = objIndice[0]
-
-        // console.log('valor ' + valor)
-
-        var pergunta = perguntas[valor]
-
-        // console.log(pergunta)
-
-        delete perguntas[valor];
-
-        inquirer.prompt([
-            {
-                name: 'pergunta',
-                message: pergunta
-                
-            }
-        ]).then(() => {
-
-            inquirer.prompt([
-                {
-                    name: 'Meresposta',
-                    message: 'digite sua resposta'
-                }
-            ]).then((resposta) => {
-
-                const Resposta = resposta['Meresposta']
-
-                let objIndiceR = Object.entries(getResp)[indice]
-                console.log('indiceR ' + objIndiceR)
-
-                let valorR = objIndiceR[0]
-                // console.log('valor ' + valorR)
-
-                // console.log(getResp)
-                // console.log(getResp[valorR])
-
-                if(Resposta === getResp[valorR]){
-                    console.log('resposta correta')
-                    delete getResp[valorR];
-                    return ADinit()
-                }else{
-                    console.log('resposta incorreta. tente novamente')
-                    delete getResp[valorR];
-                    return ADinit()
-                }
-
-            }).catch(
-                err => console.log(err)
-            )
-
-        }) 
-
+        AllGetQuestion(perguntas, getResp, func);
     }
 
 }
+
 
 //  FUNÇÃO PARA PEGAR PERGUNTAS 
 
@@ -326,9 +161,10 @@ function PegarResposta(arquivo){
 
 }
 
+
 // FUNÇÃO PARA OTIMIZAR PARTE REPETITIVA DE PERGUNTAS
 
-function AllGetQuestion(perguntas, getResp, ReturnFunc){
+function AllGetQuestion(perguntas, getResp, func){
 
     let objSize = Object.keys(perguntas).length;
 
@@ -374,11 +210,12 @@ function AllGetQuestion(perguntas, getResp, ReturnFunc){
                 if(Resposta === getResp[valorR]){
                     console.log('resposta correta')
                     delete getResp[valorR];
-                    return ReturnFunc
+                    return (func)();
+                    
                 }else{
                     console.log('resposta incorreta. tente novamente')
                     delete getResp[valorR];
-                    return ReturnFunc
+                    return (func)();
                 }
 
             }).catch(
